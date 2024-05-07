@@ -74,10 +74,14 @@ def handleCanvasClick(event):
         # Criar vértices
         createVertice(x, y, z)
     if event.button == 3:  # Botão direito
+        #aresta_aux = Aresta(vertice_objeto[0], vertice_objeto[n-1])
+        #aresta_objeto.append(aresta_aux)
         objeto = vertices_objeto.copy(), arestas_objeto.copy()
         objetos.append(objeto)
+        #limpa as listas para o proximo objeto
         vertices_objeto.clear()
         arestas_objeto.clear()
+
         print("Objeto criado")
         for vertices, arestas in objetos:
             print("Vertices:")
@@ -115,3 +119,13 @@ while rodando:
     pygame.display.flip()  # Atualize a tela
 
 pygame.quit()
+
+##ADICIONAR A OPÇÃO DE FECHAR O OBJETO QUANDO FINALIZA O OBJETO, juntar o vertice final com o inicial
+## colocar um plano pontilhado
+## dividir a figura em fatias
+##transformar esse objeto com o numero determiado de fatias: O número de fatias usadas na revolução foi igual a 30 em torno do objeto, ou
+#seja, a cada 360º/30 = 12º cria-se uma nova seção/fatia no objeto.
+##a técnica wireframe com ocultação de superfícies(pintar a face mais longe para a mais perto(pintor) apenas nas faces 
+#que estão visiveis(algoritmo de visibilidade pelo calculo da normal))
+## O numero de fatia influencia na quantidade de arestas sobrepostas, tendo mais intersecções dificulta no cálculo da ocultação de fatia
+## o numero de fatias influencia no algoritmo de pinto de forma que se houver mais fatias haverá mais sobreposições entre as faces na hora de pintar
