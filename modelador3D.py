@@ -1,4 +1,5 @@
 import pygame
+import numpy as pd
 
 # Inicialização do Pygame
 pygame.init()
@@ -12,6 +13,7 @@ objetos = []
 vertice_aux = []
 vertices_objeto = []
 arestas_objeto = []
+num_total_vertices = 0
 
 # Estrutura do objeto
 class Vertice:
@@ -35,6 +37,8 @@ class Aresta:
 def createVertice(x, y, z):
     # O vertice_aux é para auxiliar a criação das arestas, sempre pegando o vértice final da outra aresta para ser o inicial da próxima
     vertices_objeto.append(Vertice(x, y, z))
+    num_total_vertices =+ 1
+
     print("VÉRTICES:")
     for vertice in vertices_objeto:
         print(vertice)
@@ -54,7 +58,7 @@ def createVertice(x, y, z):
 #função que representa as vertice do objeto
 def drawVertices():
     for vertice in vertices_objeto:
-        pygame.draw.circle(tela, (0, 0, 0), (vertice.x, vertice.y), 2)  # Desenha um círculo preto
+        pygame.draw.circle(tela, (0, 0, 0), (vertice.x, vertice.y), 3)  # Desenha um círculo preto
 
 #função que representa as arestas do objeto
 def drawEdges():
@@ -73,9 +77,10 @@ def handleCanvasClick(event):
         z = 10
         # Criar vértices
         createVertice(x, y, z)
+
     if event.button == 3:  # Botão direito
-        #aresta_aux = Aresta(vertice_objeto[0], vertice_objeto[n-1])
-        #aresta_objeto.append(aresta_aux)
+        aresta_aux = Aresta (vertices_objeto[num_total_vertices-1], vertices_objeto[0])
+        arestas_objeto.append(aresta_aux)
         objeto = vertices_objeto.copy(), arestas_objeto.copy()
         objetos.append(objeto)
         #limpa as listas para o proximo objeto
@@ -106,8 +111,13 @@ while rodando:
         elif evento.type == pygame.MOUSEBUTTONDOWN:
             handleCanvasClick(evento)
 
-    # Preenche a tela com a cor branca
+    # Preenche a tela com o fundo branco
     tela.fill(cor_branca)
+
+    # Desenha os pontos pretos para criar o fundo pontilhado
+    for x in range(0, largura, 17):  # Desenha pontos horizontalmente com um intervalo de 10 pixels
+        for y in range(0, altura, 17):  # Desenha pontos verticalmente com um intervalo de 10 pixels
+            pygame.draw.circle(tela, (0, 0, 0), (x, y), 1)  # Desenha um ponto preto de tamanho 1 em (x, y)
 
     # Desenha os vértices
     drawVertices()
@@ -120,8 +130,6 @@ while rodando:
 
 pygame.quit()
 
-##ADICIONAR A OPÇÃO DE FECHAR O OBJETO QUANDO FINALIZA O OBJETO, juntar o vertice final com o inicial
-## colocar um plano pontilhado
 ## dividir a figura em fatias
 ##transformar esse objeto com o numero determiado de fatias: O número de fatias usadas na revolução foi igual a 30 em torno do objeto, ou
 #seja, a cada 360º/30 = 12º cria-se uma nova seção/fatia no objeto.
