@@ -1,6 +1,6 @@
 import pygame
 import numpy as pd
-
+import math
 # Inicialização do Pygame
 pygame.init()
 
@@ -14,6 +14,7 @@ vertice_aux = []
 vertices_objeto = []
 arestas_objeto = []
 num_total_vertices = 0
+num_fatias_desejado = 10
 
 # Estrutura do objeto
 class Vertice:
@@ -66,6 +67,24 @@ def drawEdges():
         pygame.draw.line(tela, (0, 0, 0), (vertices_objeto[i].x, vertices_objeto[i].y),
                          (vertices_objeto[i + 1].x, vertices_objeto[i + 1].y), 1)
         
+def rotateObject(objeto, theta):
+    for vertice in objeto[0]:  # Rotaciona cada vértice
+        vertice.x, vertice.y, _ = rotatePoint(vertice.x, vertice.y, vertice.z, theta)
+
+def rotatePoint(x, y, z, theta):
+    cos_theta = math.cos(theta)
+    sin_theta = math.sin(theta)
+    new_x = x * cos_theta - y * sin_theta
+    new_y = x * sin_theta + y * cos_theta
+    return new_x, new_y, z
+
+def drawSlices(objeto, num_fatias):
+    for i in range(num_fatias):
+        theta = math.radians(360 / num_fatias)  # Calcule o ângulo de rotação para cada fatia
+        rotateObject(objeto, theta)  # Rotacione o objeto
+        drawEdges()  # Desenhe as arestas do objeto após cada rotação
+
+        
 #Função que pega os cliques
 def handleCanvasClick(event):
     if event.button == 1:  # Botão esquerdo
@@ -84,8 +103,8 @@ def handleCanvasClick(event):
         objeto = vertices_objeto.copy(), arestas_objeto.copy()
         objetos.append(objeto)
         #limpa as listas para o proximo objeto
-        vertices_objeto.clear()
-        arestas_objeto.clear()
+      #  vertices_objeto.clear()
+       # arestas_objeto.clear()
 
         print("Objeto criado")
         for vertices, arestas in objetos:
@@ -96,7 +115,9 @@ def handleCanvasClick(event):
             for aresta in arestas:
                 print(aresta)
 
-
+        drawSlices(objeto, num_fatias_desejado)
+        vertices_objeto.clear()
+        arestas_objeto.clear()
 
 ##############Rodando as funções#################
 # Cor de fundo (branco)
